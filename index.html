@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cây Thông Nguyện Ước | Phê La</title>
+    <style>
+        :root {
+            --bg-1: #06231c;
+            --bg-2: #0d3b2d;
+            --bg-3: #711327;
+            --white: #fefefe;
+            --glass: rgba(255,255,255,0.12);
+            --glass-strong: rgba(255,255,255,0.16);
+            --stroke: rgba(255,255,255,0.2);
+            --accent: #b3122f;
+            --accent-2: #ffd166;
+            --shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+            --focus: 0 0 0 3px rgba(255, 209, 102, 0.45);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background:
+                radial-gradient(circle at 20% 15%, rgba(255,255,255,0.08), transparent 35%),
+                radial-gradient(circle at 78% 22%, rgba(255,255,255,0.05), transparent 32%),
+                linear-gradient(175deg, var(--bg-1) 0%, var(--bg-2) 48%, var(--bg-3) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: var(--white);
+            padding: clamp(18px, 4vw, 36px) clamp(12px, 5vw, 40px);
+            overflow-x: hidden;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1080px;
+            position: relative;
+            z-index: 1;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: linear-gradient(160deg, rgba(7, 50, 38, 0.92), rgba(18, 65, 50, 0.9)) padding-box,
+                        linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06)) border-box;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.14);
+            padding: clamp(18px, 3.4vw, 28px);
+            box-shadow: var(--shadow);
+            animation: fadeInUp 700ms ease both;
+            width: 100%;
+            min-height: clamp(540px, 78vh, 760px);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(12px, 2vw, 20px);
+            will-change: transform;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+        .brand-logo {
+            padding: 10px 16px;
+            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid rgba(255,255,255,0.35);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .brand-wordmark {
+            width: 170px;
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.2));
+            mix-blend-mode: multiply;
+            border-radius: 16px;
+        }
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .brand-title {
+            font-weight: 800;
+            letter-spacing: 1.3px;
+            font-size: 20px;
+        }
+        .brand-sub {
+            color: #ffdede;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 1.55em;
+            margin: 4px 0 6px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.35);
+            letter-spacing: 1.2px;
+        }
+        .subtitle {
+            color: #ffe4e4;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            letter-spacing: 0.7px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: clamp(14px, 3vw, 28px);
+            align-items: stretch;
+            flex: 1;
+        }
+
+        .tree-card {
+            text-align: center;
+            position: relative;
+            padding: 18px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            max-width: 520px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tree-zone {
+            position: relative;
+            padding-top: 10px;
+            padding-bottom: 34px;
+        }
+
+        .tree-container {
+            position: relative;
+            width: clamp(230px, 46vw, 330px);
+            height: clamp(250px, calc(46vw * 1.2), 360px);
+            margin: 0 auto 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .star {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 42px;
+            z-index: 3;
+            animation: starGlow 1.6s ease-in-out infinite;
+        }
+        @keyframes starGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px #ffd700) drop-shadow(0 0 16px #ffd700); }
+            50% { filter: drop-shadow(0 0 16px #ffd700) drop-shadow(0 0 22px #ffd700); }
+        }
+
+        .tree-svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+
+        .tree-fill-glow {
+            filter: drop-shadow(0 0 12px rgba(255,255,255,0.28)) drop-shadow(0 0 18px rgba(255,255,255,0.18));
+            opacity: 0.96;
+        }
+
+        .tree-wave {
+            mix-blend-mode: screen;
+            opacity: 0.18;
+        }
+
+        .tree-edge {
+            stroke: url(#treeStroke);
+            stroke-width: 2.6;
+            fill: none;
+            opacity: 0.75;
+        }
+
+        .tree-shadow {
+            filter: blur(14px);
+            opacity: 0.4;
+        }
+
+        .tree-strings path {
+            stroke: rgba(255,255,255,0.35);
+            stroke-width: 1.8;
+            fill: none;
+            stroke-linecap: round;
+            stroke-dasharray: 5 9;
+            animation: dash 5s linear infinite;
+        }
+
+        .string-bulb {
+            fill: #ffd166;
+            filter: drop-shadow(0 0 6px rgba(255, 209, 102, 0.8));
+            animation: stringPulse 2.4s ease-in-out infinite;
+        }
+
+        .string-bulb.alt {
+            fill: #ffb3b3;
+            filter: drop-shadow(0 0 6px rgba(255, 179, 179, 0.8));
+            animation-delay: 0.8s;
+        }
+
+        .ornament {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: #fff;
+            font-size: 20px;
+            z-index: 4;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            display: grid;
+            place-items: center;
+            animation: ornament-float 3.8s ease-in-out infinite;
+        }
+        .ornament.left-top { top: 6px; left: -32px; animation-delay: 0.1s; }
+        .ornament.right-top { top: 6px; right: -32px; animation-delay: 0.25s; }
+        .ornament.left-bottom { bottom: 20px; left: -34px; animation-delay: 0.4s; }
+        .ornament.right-bottom { bottom: 20px; right: -34px; animation-delay: 0.55s; }
+        .ornament.bottom { bottom: -60px; left: 50%; transform: translateX(-50%); animation-delay: 0.2s; }
+        @keyframes ornament-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,255,255,0));
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
+            animation: sparkle-pop 900ms ease-out forwards;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.9;
+        }
+        @keyframes sparkle-pop {
+            0% { transform: scale(0.4); opacity: 0.8; }
+            40% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0; }
+        }
+
+        .twinkle { animation: twinkle 2.6s ease-in-out infinite; }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.65; }
+            40% { opacity: 1; }
+            70% { opacity: 0.4; }
+        }
+
+        .tree-count {
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 14px;
+            background: linear-gradient(90deg, rgba(0,0,0,0.55), rgba(20,20,20,0.45));
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 14px;
+            color: #fff;
+            font-size: 13px;
+            backdrop-filter: blur(4px);
+            z-index: 4;
+            letter-spacing: 0.4px;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.12);
+            font-size: 13px;
+        }
+
+        .legend {
+            font-size: 12px;
+            margin-top: 6px;
+            color: #e6ffe6;
+        }
+
+        .form-card {
+            padding: 18px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        form { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+        }
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 16px;
+            transition: all 0.25s ease;
+        }
+        input::placeholder, textarea::placeholder { color: rgba(255, 255, 255, 0.6); }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.14);
+            box-shadow: var(--focus);
+        }
+        textarea { resize: vertical; min-height: 90px; }
+
+        .submit-btn {
+            background: linear-gradient(90deg, #b3122f, #e43f3f);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 17px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            box-shadow: 0 6px 18px rgba(228, 63, 63, 0.35);
+            animation: buttonPulse 2.6s ease-in-out infinite;
+        }
+        .submit-btn:hover { background: #9c0f26; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(201, 69, 69, 0.45); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; animation: none; transform: none; box-shadow: none; }
+        @keyframes buttonPulse {
+            0%, 100% { transform: translateY(0); box-shadow: 0 6px 18px rgba(228, 63, 63, 0.35); }
+            50% { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(228, 63, 63, 0.45); }
+        }
+
+        .message {
+            margin-top: 4px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(244, 67, 54, 0.25);
+        }
+        .message.show { opacity: 1; }
+
+        .floating-counter {
+            position: fixed;
+            bottom: 14px;
+            right: 14px;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 13px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.35);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            z-index: 10;
+            will-change: transform;
+        }
+        .toast {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 999px;
+            font-size: 14px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 30;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes dash { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -80; } }
+        @keyframes stringPulse {
+            0%, 100% { opacity: 0.7; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        @keyframes fall { to { transform: translateY(110vh); } }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 1em;
+            animation: fall linear infinite;
+            opacity: 0.8;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        @media (max-width: 900px) {
+            body { padding: 20px 24px; }
+            .card { min-height: unset; }
+        }
+
+        @media (max-width: 820px) {
+            body { align-items: flex-start; }
+            .layout { grid-template-columns: 1fr; }
+            header { flex-direction: column; align-items: center; text-align: center; }
+            .brand-text { align-items: center; }
+            .brand-wordmark { width: 150px; }
+            .tree-card,
+            .form-card { padding: 16px; }
+            .tree-container { width: clamp(210px, 60vw, 280px); height: clamp(230px, calc(60vw * 1.05), 320px); }
+            .star { font-size: 34px; top: -10px; }
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 12px; align-items: flex-start; }
+            .card {
+                max-width: 440px;
+                min-height: calc(100vh - 24px);
+                justify-content: flex-start;
+                gap: 10px;
+                padding: 16px;
+            }
+            header { gap: 8px; margin-bottom: 2px; }
+            h1 { font-size: 1.32em; }
+            .subtitle { margin-bottom: 6px; }
+            .layout {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                flex: none;
+            }
+            .tree-card {
+                order: 1;
+                padding: 12px 12px 6px;
+                min-height: 48vh;
+                border-radius: 16px;
+            }
+            .tree-zone { padding-bottom: 10px; }
+            .tree-container { width: clamp(200px, 64vw, 260px); height: clamp(220px, calc(64vw * 1.05), 300px); }
+            .legend { display: none; }
+            .ornament { width: 28px; height: 28px; font-size: 13px; }
+            .ornament.bottom { display: none; }
+            .form-card {
+                order: 2;
+                padding: 10px 12px 12px;
+                background: rgba(7, 50, 38, 0.92);
+                border: 1px solid rgba(255,255,255,0.12);
+                box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+                border-radius: 15px;
+            }
+            form { gap: 8px; }
+            input, textarea { padding: 10px; font-size: 15px; }
+            textarea { min-height: 64px; }
+            .submit-btn { width: 100%; padding: 12px; font-size: 15px; }
+            .floating-counter {
+                left: 50%;
+                transform: translateX(-50%);
+                right: auto;
+                width: calc(100% - 32px);
+                justify-content: center;
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .tree-container { width: clamp(180px, 68vw, 220px); height: clamp(200px, calc(68vw * 0.95), 240px); }
+            .star { font-size: 30px; }
+            header { text-align: center; }
+            .brand-text { align-items: center; }
+            input, textarea { padding: 10px; font-size: 14px; }
+            .submit-btn { padding: 12px; font-size: 14.5px; }
+        }
+
+        @media (max-width: 460px) {
+            h1 { font-size: 1.24em; }
+            .subtitle { font-size: 0.86em; }
+            .tree-zone { padding-bottom: 8px; }
+            .floating-counter { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="card" role="main">
+            <header>
+                <div class="brand-logo">
+                    <img src="phela.png" alt="Phê La" class="brand-wordmark">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title">CÂY THÔNG NGUYỆN ƯỚC</div>
+                    <div class="brand-sub">Thắp sáng tình yêu thương</div>
+                </div>
+            </header>
+
+            <div class="layout">
+                <section class="tree-card" aria-label="Cây thông đổi màu">
+                    <div class="tree-zone">
+                        <div class="tree-container" aria-hidden="true">
+                            <div class="star" aria-label="Ngôi sao">⭐</div>
+                            <svg class="tree-svg" viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="treeColorGradient" x1="0" y1="1" x2="0" y2="0">
+                                        <stop offset="0%" stop-color="#7c4a2d"/>
+                                        <stop offset="14%" stop-color="#5b341f"/>
+                                        <stop offset="32%" stop-color="#0b3a2c"/>
+                                        <stop offset="52%" stop-color="#1b8f5f"/>
+                                        <stop offset="72%" stop-color="#3dbf86"/>
+                                        <stop offset="88%" stop-color="#ffd166"/>
+                                        <stop offset="100%" stop-color="#ffc8dd"/>
+                                    </linearGradient>
+                                    <clipPath id="fillClip">
+                                        <rect id="fillRect" x="0" y="340" width="320" height="0" />
+                                    </clipPath>
+                                    <clipPath id="treeClip">
+                                        <path d="M160 40 L60 190 L110 190 L60 270 L120 270 L80 340 L160 340 L240 340 L200 270 L260 270 L210 190 L260 190 Z"/>
+                                    </clipPath>
+                                    <linearGradient id="treeShine" x1="0" y1="1" x2="0" y2="0">
+                                        <stop offset="0%" stop-color="rgba(255,255,255,0.0)"/>
+                                        <stop offset="55%" stop-color="rgba(255,255,255,0.22)"/>
+                                        <stop offset="95%" stop-color="rgba(255,255,255,0.08)"/>
+                                    </linearGradient>
+                                    <linearGradient id="treeStroke" x1="0" y1="1" x2="0" y2="0">
+                                        <stop offset="0%" stop-color="#dfeae6"/>
+                                        <stop offset="50%" stop-color="#f7fffb"/>
+                                        <stop offset="100%" stop-color="#ffffff"/>
+                                    </linearGradient>
+                                    <linearGradient id="waterShineGrad" x1="0" y1="1" x2="0" y2="0">
+                                        <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+                                        <stop offset="60%" stop-color="rgba(255,255,255,0.35)"/>
+                                        <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                                    </linearGradient>
+                                    <linearGradient id="treeWaveGradient" x1="0" y1="1" x2="0" y2="0" gradientUnits="objectBoundingBox">
+                                        <stop offset="0%" stop-color="rgba(255,255,255,0)" />
+                                        <stop offset="40%" stop-color="rgba(255,255,255,0.25)" />
+                                        <stop offset="60%" stop-color="rgba(255,255,255,0.35)" />
+                                        <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+                                    </linearGradient>
+                                    <radialGradient id="treeAura" cx="0.5" cy="1" r="0.85">
+                                        <stop offset="0%" stop-color="#ffd166" stop-opacity="0.45"/>
+                                        <stop offset="60%" stop-color="#ff6b6b" stop-opacity="0.18"/>
+                                        <stop offset="100%" stop-color="#ff6b6b" stop-opacity="0"/>
+                                    </radialGradient>
+                                    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+                                        <feGaussianBlur stdDeviation="18" result="blur"/>
+                                        <feMerge>
+                                            <feMergeNode in="blur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                    </filter>
+                                    <pattern id="treeTexture" width="8" height="8" patternUnits="userSpaceOnUse">
+                                        <rect width="8" height="8" fill="transparent"/>
+                                        <circle cx="2" cy="2" r="0.7" fill="#ffffff" opacity="0.12"/>
+                                        <circle cx="6" cy="4" r="0.5" fill="#ffffff" opacity="0.08"/>
+                                        <circle cx="3" cy="6" r="0.4" fill="#ffffff" opacity="0.06"/>
+                                    </pattern>
+                                </defs>
+                                <g id="tree">
+                                    <g class="tree-backdrop">
+                                        <circle cx="160" cy="150" r="150" fill="url(#treeAura)" filter="url(#softGlow)" opacity="0.6"></circle>
+                                        <ellipse class="tree-shadow" cx="160" cy="350" rx="120" ry="22" fill="#000000"></ellipse>
+                                    </g>
+                                    <path id="treeShape" d="M160 40 L60 190 L110 190 L60 270 L120 270 L80 340 L160 340 L240 340 L200 270 L260 270 L210 190 L260 190 Z"
+                                          fill="#ffffff" stroke="#e0e0e0" stroke-width="2" stroke-linejoin="round"/>
+                                    <path id="treeFill" d="M160 40 L60 190 L110 190 L60 270 L120 270 L80 340 L160 340 L240 340 L200 270 L260 270 L210 190 L260 190 Z"
+                                          fill="url(#treeColorGradient)" clip-path="url(#fillClip)" class="tree-fill-glow" />
+                                    <rect id="treeWave" x="0" y="0" width="320" height="360" fill="url(#treeWaveGradient)" clip-path="url(#fillClip)" class="tree-wave" pointer-events="none">
+                                        <animateTransform attributeName="transform" type="translate" values="0 12; 0 -12; 0 12" dur="7s" repeatCount="indefinite"/>
+                                        <animate attributeName="opacity" values="0.1;0.25;0.1" dur="7s" repeatCount="indefinite"/>
+                                    </rect>
+                                    <path id="treeTexturePath" d="M160 40 L60 190 L110 190 L60 270 L120 270 L80 340 L160 340 L240 340 L200 270 L260 270 L210 190 L260 190 Z"
+                                          fill="url(#treeTexture)" clip-path="url(#treeClip)" opacity="0.22"/>
+                                    <g class="tree-strings" clip-path="url(#treeClip)">
+                                        <path d="M70 210 Q160 160 250 210"></path>
+                                        <path d="M90 260 Q160 220 230 260"></path>
+                                        <path d="M100 165 Q160 120 220 165"></path>
+                                        <circle class="string-bulb" cx="90" cy="205" r="3"></circle>
+                                        <circle class="string-bulb alt" cx="160" cy="180" r="3.2"></circle>
+                                        <circle class="string-bulb" cx="230" cy="205" r="3"></circle>
+                                        <circle class="string-bulb alt" cx="110" cy="255" r="3.2"></circle>
+                                        <circle class="string-bulb" cx="160" cy="240" r="3"></circle>
+                                        <circle class="string-bulb alt" cx="210" cy="255" r="3.2"></circle>
+                                    </g>
+                                    <path id="treeShinePath" d="M160 40 L60 190 L110 190 L60 270 L120 270 L80 340 L160 340 L240 340 L200 270 L260 270 L210 190 L260 190 Z"
+                                          fill="url(#treeShine)" opacity="0.28" />
+                                    <path id="treeEdgePath" d="M160 40 L60 190 L110 190 L60 270 L120 270 L80 340 L160 340 L240 340 L200 270 L260 270 L210 190 L260 190 Z"
+                                          class="tree-edge" />
+                                    <g id="treeLights" clip-path="url(#fillClip)" aria-hidden="true"></g>
+                                    <rect id="waterShine" x="0" y="340" width="320" height="14" fill="url(#waterShineGrad)" opacity="0" pointer-events="none"/>
+                                    <rect id="treeTrunk" x="140" y="340" width="40" height="40" rx="6" fill="#ffffff" stroke="#d4d4d4" stroke-width="2"/>
+                                </g>
+                            </svg>
+                            <div class="ornament left-top" aria-label="Quà tặng">🎁</div>
+                            <div class="ornament right-top" aria-label="Người tuyết">⛄</div>
+                            <div class="ornament left-bottom" aria-label="Bánh gừng">🍪</div>
+                            <div class="ornament right-bottom" aria-label="Khăn ấm">🧣</div>
+                            <div class="ornament bottom" aria-label="Niềm vui">🧸</div>
+                        </div>
+                    </div>
+                    <div class="tree-count" id="treeCountBadge" aria-live="polite">0/20.000</div>
+                    <div class="stat-row">
+                        <div class="chip">🎁 Lời chúc: <strong id="wishCountLabel">0</strong></div>
+                        <div class="chip">🧣 Khăn ấm: <strong id="scarfCount">0</strong></div>
+                    </div>
+                    <div class="legend">Cứ 10 lời chúc = 1 khăn ấm. Cây đổi màu nhiều tầng từ gốc lên đỉnh.</div>
+                </section>
+
+                <section class="form-card" aria-label="Gửi lời chúc">
+                    <p class="subtitle">Mỗi lời chúc thắp thêm sắc màu cho cây. Chạm mốc 10.000 lời chúc = 1.000 khăn ấm.</p>
+                    <form onsubmit="sendWish(event)">
+                        <div class="input-group">
+                            <label for="codeInput">Mã của bạn</label>
+                            <input type="text" id="codeInput" name="code" placeholder="NHẬP MÃ" maxlength="50" aria-required="true">
+                        </div>
+                        <div class="input-group">
+                            <label for="wishInput">Lời chúc</label>
+                            <textarea id="wishInput" name="wish" placeholder="NHẬP LỜI CHÚC" maxlength="200" aria-required="true"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn" id="submitBtn">❄️ GỬI LỜI CHÚC</button>
+                        <div class="message" id="message" role="status" aria-live="polite"></div>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <div class="floating-counter" aria-live="polite">
+            <span>🎄</span>
+            <span id="floatingCount">0/20k</span>
+        </div>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+
+    <script>
+        const maxWishes = 20000;
+        const milestoneWishes = 10000;
+        const scarvesPerWish = 0.1;
+        const treeHeight = 340;
+        const lightColors = ['#ffd166', '#ffe9a3', '#ffb3b3', '#caffbf', '#b5e8ff', '#ffc8dd'];
+        const wishes = [];
+        let lastFilled = 0;
+        let lastCount = 0;
+        let isSubmitting = false;
+        let toastTimer;
+
+        function createSnowflakes() {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+            const isSmallScreen = window.matchMedia('(max-width: 640px)').matches;
+            const total = isSmallScreen ? 18 : 26;
+            for (let i = 0; i < total; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                snowflake.style.animationDelay = Math.random() * 4 + 's';
+                snowflake.style.fontSize = (Math.random() * 0.5 + 0.55) + 'em';
+                snowflake.style.opacity = 0.65 + Math.random() * 0.25;
+                document.body.appendChild(snowflake);
+            }
+        }
+
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = 'message ' + (type || '') + ' show';
+            setTimeout(() => messageEl.classList.remove('show'), 2600);
+        }
+
+        function showSuccessToast(text) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = text;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function updateWishCount() {
+            const count = wishes.length;
+            const wishLabel = document.getElementById('wishCountLabel');
+            if (wishLabel) wishLabel.textContent = count.toLocaleString('vi-VN');
+            const floating = document.getElementById('floatingCount');
+            if (floating) floating.textContent = count.toLocaleString('vi-VN') + '/20k';
+            const scarves = Math.floor(count * scarvesPerWish);
+            const scarfLabel = document.getElementById('scarfCount');
+            if (scarfLabel) scarfLabel.textContent = scarves.toLocaleString('vi-VN');
+
+            updateTreeFill(count);
+            updateTreeBadge(count);
+        }
+
+        function updateTreeFill(count) {
+            const progress = Math.min(count / maxWishes, 1);
+            const fillRect = document.getElementById('fillRect');
+            if (fillRect) {
+                const filledHeight = progress * treeHeight;
+                const fromHeight = lastFilled;
+                const fromY = treeHeight - fromHeight;
+                const toY = treeHeight - filledHeight;
+
+                fillRect.animate([
+                    { height: fromHeight, y: fromY },
+                    { height: filledHeight, y: toY }
+                ], { duration: 700, easing: 'ease-in-out', fill: 'forwards' });
+
+                fillRect.setAttribute('height', filledHeight);
+                fillRect.setAttribute('y', toY);
+                lastFilled = filledHeight;
+            }
+
+            const waterShine = document.getElementById('waterShine');
+            if (waterShine) {
+                const y = Math.max(0, treeHeight - progress * treeHeight - 4);
+                waterShine.setAttribute('y', y);
+                waterShine.animate([
+                    { opacity: 0, transform: 'translateY(4px)' },
+                    { opacity: 0.7, transform: 'translateY(0)' },
+                    { opacity: 0, transform: 'translateY(-3px)' }
+                ], { duration: 600, easing: 'ease-out', fill: 'forwards' });
+            }
+
+            const trunk = document.getElementById('treeTrunk');
+            if (trunk) {
+                const trunkColor = blendColors('#ffffff', '#7c4a2d', Math.min(progress * 1.35, 1));
+                trunk.setAttribute('fill', trunkColor);
+                trunk.setAttribute('stroke', blendColors('#dcdcdc', '#5b341f', Math.min(progress * 1.35, 1)));
+            }
+
+            if (count > lastCount && lastCount > 0) {
+                spawnSparkle(progress);
+            }
+            lastCount = count;
+        }
+
+        function updateTreeBadge(count) {
+            const badge = document.getElementById('treeCountBadge');
+            if (badge) badge.textContent = count.toLocaleString('vi-VN') + '/20.000';
+        }
+
+        function blendColors(from, to, ratio) {
+            const c1 = hexToRgb(from);
+            const c2 = hexToRgb(to);
+            const r = Math.round(c1.r + (c2.r - c1.r) * ratio);
+            const g = Math.round(c1.g + (c2.g - c1.g) * ratio);
+            const b = Math.round(c1.b + (c2.b - c1.b) * ratio);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function hexToRgb(hex) {
+            const clean = hex.replace('#', '');
+            const bigint = parseInt(clean, 16);
+            return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
+        }
+
+        function sendWish(event) {
+            event?.preventDefault();
+            if (isSubmitting) return;
+            const codeInput = document.getElementById('codeInput');
+            const wishInput = document.getElementById('wishInput');
+            const button = document.getElementById('submitBtn');
+            const code = codeInput.value.trim();
+            const wish = wishInput.value.trim();
+
+            if (!code) { showMessage('Vui lòng nhập mã!', 'error'); codeInput.focus(); return; }
+            if (!wish) { showMessage('Vui lòng nhập lời chúc!', 'error'); wishInput.focus(); return; }
+            if (wishes.length >= maxWishes) {
+                showMessage('Đã đạt 20.000 lời chúc! Cây đã phủ màu.', 'error');
+                return;
+            }
+
+            isSubmitting = true;
+            button.disabled = true;
+
+            wishes.push({ code, wish, time: new Date() });
+            updateWishCount();
+
+            codeInput.value = '';
+            wishInput.value = '';
+
+            const current = wishes.length;
+            if (current === milestoneWishes) {
+                showSuccessToast('Đã chạm mốc 10.000 lời chúc = 1.000 khăn ấm! 🌟');
+            } else {
+                showSuccessToast('Gửi lời chúc thành công! 🎄');
+            }
+
+            setTimeout(() => {
+                isSubmitting = false;
+                button.disabled = false;
+            }, 400);
+        }
+
+        function spawnSparkle(progress) {
+            const container = document.querySelector('.tree-container');
+            if (!container) return;
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            const bounds = container.getBoundingClientRect();
+            const width = bounds.width;
+            const height = bounds.height;
+            const y = 20 + (1 - progress) * (height - 50);
+            const x = width * 0.35 + Math.random() * width * 0.3;
+            sparkle.style.left = `${x}px`;
+            sparkle.style.top = `${y}px`;
+            container.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 950);
+        }
+
+        function createTreeLights() {
+            const lightsGroup = document.getElementById('treeLights');
+            if (!lightsGroup) return;
+            lightsGroup.innerHTML = '';
+            const total = 18;
+            for (let i = 0; i < total; i++) {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const x = 70 + Math.random() * 180;
+                const y = 70 + Math.random() * 230;
+                const r = 3 + Math.random() * 5;
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', r);
+                circle.setAttribute('fill', lightColors[i % lightColors.length]);
+                circle.setAttribute('opacity', 0.65 + Math.random() * 0.3);
+                circle.style.filter = 'drop-shadow(0 0 6px rgba(255,255,255,0.8))';
+                circle.classList.add('twinkle');
+                circle.style.animationDelay = `${Math.random() * 2}s`;
+                lightsGroup.appendChild(circle);
+            }
+            for (let i = 0; i < 5; i++) {
+                const b = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const x = 80 + Math.random() * 160;
+                const y = 80 + Math.random() * 200;
+                const r = 14 + Math.random() * 12;
+                b.setAttribute('cx', x);
+                b.setAttribute('cy', y);
+                b.setAttribute('r', r);
+                b.setAttribute('fill', lightColors[(i + 2) % lightColors.length]);
+                b.setAttribute('opacity', 0.16);
+                b.style.filter = 'blur(8px)';
+                lightsGroup.appendChild(b);
+            }
+        }
+
+        function bindEnterSubmit() {
+            const form = document.querySelector('form');
+            form.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                    sendWish(e);
+                }
+                if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && e.target.tagName === 'TEXTAREA') {
+                    sendWish(e);
+                }
+            });
+        }
+
+        function seedDemo() {
+            const seedCount = 3500;
+            for (let i = 0; i < seedCount; i++) {
+                wishes.push({ code: 'demo', wish: 'demo', time: new Date() });
+            }
+        }
+
+        // Init
+        createSnowflakes();
+        createTreeLights();
+        seedDemo(); // bỏ đi nếu lấy dữ liệu thật từ backend
+        bindEnterSubmit();
+        updateWishCount();
+    </script>
+</body>
+</html>
