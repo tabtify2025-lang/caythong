@@ -445,6 +445,70 @@
             will-change: transform;
         }
 
+        /* Thêm Texture Noise */
+        .tree-texture-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Animation cây đung đưa */
+        @keyframes treeSway {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(0.5deg); }
+            75% { transform: rotate(-0.5deg); }
+        }
+        
+        .tree-svg g#tree {
+            transform-origin: bottom center;
+            animation: treeSway 6s ease-in-out infinite;
+        }
+
+        @keyframes ornamentSwing {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+
+        /* Hiệu ứng đèn lung linh hơn */
+        @keyframes lightTwinkle {
+            0%, 100% { opacity: 0.4; transform: scale(0.8); filter: brightness(1); }
+            50% { opacity: 1; transform: scale(1.2); filter: brightness(1.5) drop-shadow(0 0 5px currentColor); }
+        }
+
+        .string-bulb {
+            animation: lightTwinkle 3s ease-in-out infinite alternate;
+        }
+        .string-bulb.alt {
+            animation-delay: 1.5s;
+        }
+        
+        /* Hào quang (Aura) mạnh hơn */
+        .tree-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 209, 102, 0.2), transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+            animation: auraPulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes auraPulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
         @media (max-width: 900px) {
             body { padding: 20px 24px; }
             .card { min-height: unset; }
@@ -548,6 +612,7 @@
                 <section class="tree-card" aria-label="Cây thông đổi màu">
                     <div class="tree-zone">
                         <div class="tree-container" aria-hidden="true">
+                            <div class="tree-texture-overlay"></div>
                             <div class="star" aria-label="Ngôi sao">⭐</div>
                             <svg class="tree-svg" viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
@@ -615,12 +680,23 @@
                                           fill="#ffffff" stroke="#e0e0e0" stroke-width="2" stroke-linejoin="round"/>
                                     <path id="treeFill" d="M160 40 L75 190 L110 190 L60 270 L120 270 L50 340 L160 340 L270 340 L200 270 L260 270 L210 190 L245 190 Z"
                                           fill="url(#treeColorGradient)" clip-path="url(#fillClip)" class="tree-fill-glow" />
-                                    <rect id="treeWave" x="0" y="0" width="320" height="360" fill="url(#treeWaveGradient)" clip-path="url(#fillClip)" class="tree-wave" pointer-events="none">
+                                    <rect id="treeWave" x="0" y="0" width="320" height="360" fill="url(#treeWaveGradient)" clip-path="url(#treeClip)" class="tree-wave" pointer-events="none">
                                         <animateTransform attributeName="transform" type="translate" values="0 12; 0 -12; 0 12" dur="7s" repeatCount="indefinite"/>
                                         <animate attributeName="opacity" values="0.1;0.25;0.1" dur="7s" repeatCount="indefinite"/>
                                     </rect>
                                     <path id="treeTexturePath" d="M160 40 L75 190 L110 190 L60 270 L120 270 L50 340 L160 340 L270 340 L200 270 L260 270 L210 190 L245 190 Z"
                                           fill="url(#treeTexture)" clip-path="url(#treeClip)" opacity="0.22"/>
+                                    
+                                    <!-- Dây kim tuyến -->
+                                    <g id="treeTinsel" clip-path="url(#treeClip)" fill="none" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 4" opacity="0.7">
+                                        <path d="M80 180 Q160 230 240 180" stroke="#ffd700"></path>
+                                        <path d="M70 240 Q160 290 250 240" stroke="#c0c0c0"></path>
+                                        <path d="M60 300 Q160 350 260 300" stroke="#ffd700"></path>
+                                    </g>
+
+                                    <!-- Đồ trang trí trên thân cây -->
+                                    <g id="treeOrnaments" clip-path="url(#treeClip)"></g>
+
                                     <g class="tree-strings" clip-path="url(#treeClip)">
                                         <path d="M78 210 Q160 160 242 210"></path>
                                         <path d="M80 260 Q160 220 240 260"></path>
@@ -636,7 +712,7 @@
                                           fill="url(#treeShine)" opacity="0.28" />
                                     <path id="treeEdgePath" d="M160 40 L75 190 L110 190 L60 270 L120 270 L50 340 L160 340 L270 340 L200 270 L260 270 L210 190 L245 190 Z"
                                           class="tree-edge" />
-                                    <g id="treeLights" clip-path="url(#fillClip)" aria-hidden="true"></g>
+                                    <g id="treeLights" clip-path="url(#treeClip)" aria-hidden="true"></g>
                                     <rect id="waterShine" x="0" y="340" width="320" height="14" fill="url(#waterShineGrad)" opacity="0" pointer-events="none"/>
                                     <rect id="treeTrunk" x="140" y="340" width="40" height="40" rx="6" fill="#ffffff" stroke="#d4d4d4" stroke-width="2"/>
                                 </g>
@@ -697,18 +773,37 @@
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (prefersReducedMotion) return;
             const isSmallScreen = window.matchMedia('(max-width: 640px)').matches;
-            const total = isSmallScreen ? 18 : 26;
-            for (let i = 0; i < total; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.innerHTML = '❄';
-                snowflake.style.left = Math.random() * 100 + '%';
-                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                snowflake.style.animationDelay = Math.random() * 4 + 's';
-                snowflake.style.fontSize = (Math.random() * 0.5 + 0.55) + 'em';
-                snowflake.style.opacity = 0.65 + Math.random() * 0.25;
-                document.body.appendChild(snowflake);
-            }
+            
+            // Tạo 3 lớp tuyết (Parallax)
+            const layers = [
+                { count: isSmallScreen ? 12 : 18, size: [0.6, 0.8], opacity: [0.7, 0.9], speed: 1, blur: 0 },
+                { count: isSmallScreen ? 8 : 14, size: [0.3, 0.5], opacity: [0.4, 0.6], speed: 0.6, blur: 1 },
+                { count: isSmallScreen ? 6 : 10, size: [0.2, 0.3], opacity: [0.2, 0.4], speed: 0.4, blur: 2 }
+            ];
+
+            layers.forEach(layer => {
+                for (let i = 0; i < layer.count; i++) {
+                    const snowflake = document.createElement('div');
+                    snowflake.className = 'snowflake';
+                    snowflake.innerHTML = '❄';
+                    snowflake.style.left = Math.random() * 100 + '%';
+                    const duration = (Math.random() * 3 + 5) / layer.speed;
+                    snowflake.style.animationDuration = duration + 's';
+                    snowflake.style.animationDelay = -Math.random() * duration + 's';
+                    
+                    const size = layer.size[0] + Math.random() * (layer.size[1] - layer.size[0]);
+                    snowflake.style.fontSize = size + 'em';
+                    
+                    const opacity = layer.opacity[0] + Math.random() * (layer.opacity[1] - layer.opacity[0]);
+                    snowflake.style.opacity = opacity;
+                    
+                    if (layer.blur > 0) {
+                        snowflake.style.filter = `blur(${layer.blur}px)`;
+                    }
+                    
+                    document.body.appendChild(snowflake);
+                }
+            });
         }
 
         function showMessage(text, type) {
@@ -905,6 +1000,90 @@
             });
         }
 
+        function createOrnaments() {
+            const group = document.getElementById('treeOrnaments');
+            if (!group) return;
+            group.innerHTML = '';
+
+            const ornamentTypes = ['ball', 'ball', 'gift', 'bell', 'candy'];
+            const colors = ['#ef476f', '#ffd166', '#06d6a0', '#118ab2', '#ffffff'];
+
+            // Tọa độ các vùng lá cây để treo đồ (xMin, xMax, yMin, yMax)
+            const zones = [
+                { y: 120, xMin: 130, xMax: 190 }, // Tầng trên
+                { y: 160, xMin: 110, xMax: 210 },
+                { y: 220, xMin: 90, xMax: 230 },  // Tầng giữa
+                { y: 280, xMin: 70, xMax: 250 },  // Tầng dưới
+                { y: 320, xMin: 80, xMax: 240 }
+            ];
+
+            const totalOrnaments = 18;
+
+            for (let i = 0; i < totalOrnaments; i++) {
+                const zone = zones[Math.floor(Math.random() * zones.length)];
+                // Random x trong vùng an toàn của tầng lá
+                const x = zone.xMin + Math.random() * (zone.xMax - zone.xMin);
+                // Random y lân cận vùng đó
+                const y = zone.y + (Math.random() * 40 - 20);
+
+                const type = ornamentTypes[Math.floor(Math.random() * ornamentTypes.length)];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                g.setAttribute('transform', `translate(${x}, ${y})`);
+                
+                // Animation lắc lư cho đồ trang trí
+                g.style.animation = `ornamentSwing ${2 + Math.random()}s ease-in-out infinite alternate`;
+                g.style.transformOrigin = 'top center';
+
+                let shape;
+                if (type === 'ball') {
+                    shape = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    shape.setAttribute('r', 5 + Math.random() * 2);
+                    shape.setAttribute('fill', color);
+                    shape.setAttribute('stroke', 'rgba(0,0,0,0.1)');
+                } else if (type === 'gift') {
+                    shape = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    shape.innerHTML = `
+                        <rect x="-6" y="0" width="12" height="12" fill="${color}" rx="2" />
+                        <rect x="-6" y="5" width="12" height="2" fill="rgba(255,255,255,0.5)" />
+                        <rect x="-1" y="0" width="2" height="12" fill="rgba(255,255,255,0.5)" />
+                    `;
+                } else if (type === 'bell') {
+                     shape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                     shape.setAttribute('d', 'M0 0 Q-5 10 -6 12 L6 12 Q5 10 0 0 Z M0 12 L0 14');
+                     shape.setAttribute('fill', '#ffd700');
+                     shape.setAttribute('stroke', '#b8860b');
+                     shape.setAttribute('stroke-width', '1');
+                     shape.setAttribute('transform', 'scale(1.2)');
+                } else if (type === 'candy') {
+                    shape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    shape.setAttribute('d', 'M-3 0 L-3 10 Q-3 14 0 14 Q3 14 3 10 L3 -2');
+                    shape.setAttribute('stroke', '#ffffff');
+                    shape.setAttribute('stroke-width', '4');
+                    shape.setAttribute('fill', 'none');
+                    shape.setAttribute('stroke-linecap', 'round');
+                    // Thêm sọc đỏ
+                    const stripe = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    stripe.setAttribute('d', 'M-3 0 L-3 10 Q-3 14 0 14 Q3 14 3 10 L3 -2');
+                    stripe.setAttribute('stroke', '#d62828');
+                    stripe.setAttribute('stroke-width', '4');
+                    stripe.setAttribute('fill', 'none');
+                    stripe.setAttribute('stroke-dasharray', '2 3');
+                    stripe.setAttribute('stroke-linecap', 'round');
+                    
+                    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    group.appendChild(shape);
+                    group.appendChild(stripe);
+                    group.setAttribute('transform', 'scale(0.8) rotate(15)');
+                    shape = group;
+                }
+
+                g.appendChild(shape);
+                group.appendChild(g);
+            }
+        }
+
         function seedDemo() {
             const seedCount = 13991;
             for (let i = 0; i < seedCount; i++) {
@@ -915,6 +1094,7 @@
         // Init
         createSnowflakes();
         createTreeLights();
+        createOrnaments();
         seedDemo(); // bỏ đi nếu lấy dữ liệu thật từ backend
         bindEnterSubmit();
         updateWishCount();
