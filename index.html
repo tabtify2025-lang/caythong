@@ -20,6 +20,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: hidden; }
         body {
             font-family: 'Arial', sans-serif;
             background:
@@ -395,28 +396,30 @@
         }
         .toast {
             position: fixed;
-            top: 14px;
+            top: 12px;
             left: 50%;
-            transform: translateX(-50%) translateY(-10px);
-            background: linear-gradient(120deg, #0ba360, #3cba92);
-            color: #0a1d14;
-            padding: 12px 20px;
+            transform: translate(-50%, -12px);
+            background: linear-gradient(120deg, #0ba360, #3cba92, #a3f7b5);
+            color: #032c1b;
+            padding: 12px 24px;
             border-radius: 999px;
             font-size: 14px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 18px 35px rgba(0,0,0,0.3), 0 0 18px rgba(59, 255, 181, 0.5);
+            border: 1px solid rgba(255,255,255,0.55);
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.25s ease, transform 0.25s ease;
-            z-index: 30;
+            z-index: 120;
             white-space: nowrap;
             max-width: calc(100vw - 32px);
             text-overflow: ellipsis;
             overflow: hidden;
+            letter-spacing: 0.4px;
+            animation: toastGlow 2.4s ease-in-out infinite;
         }
         .toast.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            transform: translate(-50%, 0);
         }
 
         @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -426,6 +429,10 @@
             50% { opacity: 1; transform: scale(1.05); }
         }
         @keyframes fall { to { transform: translateY(110vh); } }
+        @keyframes toastGlow {
+            0%, 100% { box-shadow: 0 18px 35px rgba(0,0,0,0.25), 0 0 16px rgba(59,255,181,0.45); }
+            50% { box-shadow: 0 22px 38px rgba(0,0,0,0.3), 0 0 22px rgba(255,255,255,0.65); }
+        }
 
         .snowflake {
             position: absolute;
@@ -493,7 +500,7 @@
                 border-radius: 15px;
             }
             form { gap: 8px; }
-            input, textarea { padding: 10px; font-size: 15px; }
+            input, textarea { padding: 12px; font-size: 16px; }
             textarea { min-height: 64px; }
             .submit-btn { width: 100%; padding: 12px; font-size: 15px; }
             .floating-counter {
@@ -511,7 +518,7 @@
             .star { font-size: 30px; }
             header { text-align: center; }
             .brand-text { align-items: center; }
-            input, textarea { padding: 10px; font-size: 14px; }
+            input, textarea { padding: 11px; font-size: 16px; }
             .submit-btn { padding: 12px; font-size: 14.5px; }
             .tree-count { top: -4px; right: -6px; padding: 6px 10px; font-size: 11px; }
         }
@@ -671,8 +678,8 @@
             <span>🎄</span>
             <span id="floatingCount">0/20k</span>
         </div>
-        <div class="toast" id="toast" role="status" aria-live="polite"></div>
     </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
         const maxWishes = 20000;
