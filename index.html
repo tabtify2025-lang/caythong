@@ -266,18 +266,16 @@
 
         .tree-count {
             position: absolute;
-            bottom: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 8px 14px;
-            background: linear-gradient(90deg, rgba(0,0,0,0.55), rgba(20,20,20,0.45));
+            top: -8px;
+            right: -10px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.65), rgba(20,20,20,0.5));
             border: 1px solid rgba(255,255,255,0.18);
-            border-radius: 14px;
+            border-radius: 12px;
             color: #fff;
-            font-size: 13px;
-            backdrop-filter: blur(4px);
+            font-size: 12px;
             z-index: 4;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.3px;
             box-shadow: 0 10px 28px rgba(0,0,0,0.35);
         }
 
@@ -397,19 +395,24 @@
         }
         .toast {
             position: fixed;
-            top: 16px;
+            top: 14px;
             left: 50%;
             transform: translateX(-50%) translateY(-10px);
-            background: rgba(0, 0, 0, 0.75);
-            color: #fff;
+            background: linear-gradient(120deg, #0ba360, #3cba92);
+            color: #0a1d14;
             padding: 12px 20px;
             border-radius: 999px;
             font-size: 14px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.4);
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition: opacity 0.25s ease, transform 0.25s ease;
             z-index: 30;
+            white-space: nowrap;
+            max-width: calc(100vw - 32px);
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
         .toast.show {
             opacity: 1;
@@ -510,6 +513,7 @@
             .brand-text { align-items: center; }
             input, textarea { padding: 10px; font-size: 14px; }
             .submit-btn { padding: 12px; font-size: 14.5px; }
+            .tree-count { top: -4px; right: -6px; padding: 6px 10px; font-size: 11px; }
         }
 
         @media (max-width: 460px) {
